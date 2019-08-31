@@ -24,3 +24,5 @@ mongoose.connect(Config.databaseUrl,
 
     }
 )
+
+module.exports = app;

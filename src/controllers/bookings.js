@@ -5,6 +5,7 @@ const Utils = require("../lib/utils");
 const isAdmin = require("../lib/authApi");
 const BookingModel = require("../models/booking");
 const mongoose = require("mongoose");
+const Const = require("../lib/consts");
 
 router.put('/', async (req, res) => {
 
@@ -18,16 +19,16 @@ router.put('/', async (req, res) => {
         } = req.body;
 
         if (!firstName)
-            return Utils.errorResponse(res, "firstName is required");
+            return Utils.errorResponse(res, Const.addBookingError.noFirstName);
 
         if (!lastName)
-            return Utils.errorResponse(res, "lastName is required");
+            return Utils.errorResponse(res, Const.addBookingError.noLastName);
 
         if (!email)
-            return Utils.errorResponse(res, "email is required");
+            return Utils.errorResponse(res, Const.addBookingError.noEmail);
 
         if (!phoneNumber)
-            return Utils.errorResponse(res, "phoneNumber is required");
+            return Utils.errorResponse(res, Const.addBookingError.noPhoneNumber);
 
         const confirmationCode = Utils.generateCode();
         let booking = await BookingModel.findOne({ email });
@@ -46,11 +47,13 @@ router.put('/', async (req, res) => {
             await booking.save();
         }
 
-        await Utils.sendMail({
+        // i do not want await sendMail because api will execute longer,
+        // so it will be executed asynchronously
+        Utils.sendMail({
             to: email,
             subject: 'Conference confirmation code',
             text: `Your confirmation code: ${confirmationCode}`
-        });
+        }).catch(err => console.error("send email err:", err));
 
         Utils.successResponse(res, {
             booking
@@ -87,7 +90,7 @@ router.delete('/:id', isAdmin, async (req, res) => {
         const { id } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(id))
-            return Utils.errorResponse(res, "Invalid id value");
+            return Utils.errorResponse(res, Const.deleteBookingError.invalidId);
 
         await BookingModel.deleteOne({ _id: id });
 
