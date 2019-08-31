@@ -1,7 +1,10 @@
 'use strict';
 const expect = require('chai').expect;
 const fetch = require('node-fetch');
-const Const = require("../src/lib/consts")
+const Const = require("../src/lib/consts");
+const Config = require("../src/config");
+
+const host = `http://localhost:${Config.port}`;
 
 describe('Bookings API routes', function () {
 
@@ -11,7 +14,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings")
+                const response = await fetch(`${host}/bookings`)
                     .then(res => res.json());
 
                 expect(response).have.property("error").equal(true);
@@ -27,7 +30,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     headers: { 'Authorization': "test" },
                 }).then(res => res.json());
 
@@ -44,7 +47,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     headers: { 'Authorization': global.apiAuth },
                 }).then(res => res.json());
 
@@ -65,7 +68,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     method: "PUT"
                 }).then(res => res.json());
 
@@ -82,7 +85,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     method: "PUT",
                     body: JSON.stringify({
                         firstName: "test"
@@ -103,7 +106,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     method: "PUT",
                     body: JSON.stringify({
                         firstName: "test",
@@ -125,7 +128,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     method: "PUT",
                     body: JSON.stringify({
                         firstName: "test",
@@ -148,7 +151,7 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch("http://localhost:8080/bookings", {
+                const response = await fetch(`${host}/bookings`, {
                     method: "PUT",
                     body: JSON.stringify({
                         firstName: "test",
@@ -180,7 +183,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await fetch(
-                    `http://localhost:8080/bookings/${global.newBookingId}`, {
+                    `${host}/bookings/${global.newBookingId}`, {
                         method: "DELETE"
                     })
                     .then(res => res.json());
@@ -199,7 +202,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await fetch(
-                    `http://localhost:8080/bookings/${global.newBookingId}`, {
+                    `${host}/bookings/${global.newBookingId}`, {
                         method: "DELETE",
                         headers: { 'Authorization': "test" }
                     })
@@ -219,7 +222,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await fetch(
-                    `http://localhost:8080/bookings/1234`, {
+                    `${host}/bookings/1234`, {
                         method: "DELETE",
                         headers: { 'Authorization': global.apiAuth }
                     })
@@ -239,7 +242,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await fetch(
-                    `http://localhost:8080/bookings/${global.newBookingId}`, {
+                    `${host}/bookings/${global.newBookingId}`, {
                         method: "DELETE",
                         headers: { 'Authorization': global.apiAuth }
                     })
