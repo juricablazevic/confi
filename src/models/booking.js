@@ -1,3 +1,4 @@
+'use strict';
 var mongoose = require('mongoose');
 
 // Defining a schema
@@ -16,6 +17,10 @@ const schema = new mongoose.Schema({
         unique: true
     },
     phoneNumber: {
+        type: String,
+        required: true
+    },
+    confirmationCode: {
         type: String,
         required: true
     }

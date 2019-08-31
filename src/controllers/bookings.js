@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const router = express.Router();
 const Utils = require("../lib/utils");
@@ -28,15 +29,28 @@ router.put('/', async (req, res) => {
         if (!phoneNumber)
             return Utils.errorResponse(res, "phoneNumber is required");
 
+        const confirmationCode = Utils.generateCode();
         let booking = await BookingModel.findOne({ email });
 
-        if (!booking)
+        if (!booking) {
             booking = await BookingModel.create({
                 firstName,
                 lastName,
                 email,
-                phoneNumber
+                phoneNumber,
+                confirmationCode
             });
+        }
+        else {
+            booking.confirmationCode = confirmationCode;
+            await booking.save();
+        }
+
+        await Utils.sendMail({
+            to: email,
+            subject: 'Conference confirmation code',
+            text: `Your confirmation code: ${confirmationCode}`
+        });
 
         Utils.successResponse(res, {
             booking
