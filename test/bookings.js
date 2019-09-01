@@ -2,16 +2,18 @@
 const expect = require('chai').expect;
 const Const = require("../src/lib/consts");
 
+const basePath = "/api/bookings";
+
 describe('Bookings API routes', function () {
 
-    describe('GET /bookings', function () {
+    describe(`GET ${basePath}`, function () {
 
         it('missing authorization header', async function () {
 
             try {
 
                 const response = await global.request
-                    .get('/bookings');
+                    .get(basePath);
 
                 const body = response.body;
 
@@ -29,7 +31,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .get('/bookings')
+                    .get(basePath)
                     .set('Authorization', "test");
 
                 const body = response.body;
@@ -48,7 +50,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .get('/bookings')
+                    .get(basePath)
                     .set('Authorization', global.apiAuth);
 
                 const body = response.body;
@@ -64,14 +66,14 @@ describe('Bookings API routes', function () {
 
     });
 
-    describe('PUT /bookings', function () {
+    describe(`PUT ${basePath}`, function () {
 
         it('no first name', async function () {
 
             try {
 
                 const response = await global.request
-                    .put('/bookings');
+                    .put(basePath);
 
                 const body = response.body;
 
@@ -89,7 +91,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .put('/bookings')
+                    .put(basePath)
                     .send({
                         firstName: "test"
                     });
@@ -110,7 +112,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .put('/bookings')
+                    .put(basePath)
                     .send({
                         firstName: "test",
                         lastName: "test"
@@ -132,7 +134,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .put('/bookings')
+                    .put(basePath)
                     .send({
                         firstName: "test",
                         lastName: "test",
@@ -155,7 +157,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .put('/bookings')
+                    .put(basePath)
                     .send({
                         firstName: "test",
                         lastName: "test",
@@ -179,14 +181,14 @@ describe('Bookings API routes', function () {
 
     });
 
-    describe('DELETE /bookings/:id', function () {
+    describe(`DELETE ${basePath}/:id`, function () {
 
         it('missing authorization header', async function () {
 
             try {
 
                 const response = await global.request
-                    .delete(`/bookings/${global.newBookingId}`);
+                    .delete(`${basePath}/${global.newBookingId}`);
 
                 const body = response.body;
 
@@ -204,7 +206,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .delete(`/bookings/${global.newBookingId}`)
+                    .delete(`${basePath}/${global.newBookingId}`)
                     .set('Authorization', "test");
 
                 const body = response.body;
@@ -223,7 +225,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .delete(`/bookings/1234`)
+                    .delete(`${basePath}/1234`)
                     .set('Authorization', global.apiAuth);
 
                 const body = response.body;
@@ -242,7 +244,7 @@ describe('Bookings API routes', function () {
             try {
 
                 const response = await global.request
-                    .delete(`/bookings/${global.newBookingId}`)
+                    .delete(`${basePath}/${global.newBookingId}`)
                     .set('Authorization', global.apiAuth);
 
                 const body = response.body;
