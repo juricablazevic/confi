@@ -1,12 +1,13 @@
 'use strict';
 const http = require('http');
 const app = require('./app');
-const Config = require('./config');
 const mongoose = require("mongoose");
+const port = 8081;
+const httpServer = http.createServer(app);
 
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect(Config.databaseUrl,
+mongoose.connect("mongodb://localhost/confitest",
     { useNewUrlParser: true },
     err => {
 
@@ -15,12 +16,12 @@ mongoose.connect(Config.databaseUrl,
             process.exit(1);
         }
 
-        //server config
-        const httpServer = http.createServer(app);
-
-        httpServer.listen(Config.port, () =>
-            console.log(`http server is running on ${Config.port}`)
-        );
+        httpServer.listen(port, () => {
+            console.log(`http server is running on ${port}\n`);
+            httpServer.emit("serverStarted");
+        });
 
     }
 )
+
+module.exports = httpServer;

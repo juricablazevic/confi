@@ -1,10 +1,6 @@
 'use strict';
 const expect = require('chai').expect;
-const fetch = require('node-fetch');
 const Const = require("../src/lib/consts");
-const Config = require("../src/config");
-
-const host = `http://localhost:${Config.port}`;
 
 describe('Bookings API routes', function () {
 
@@ -14,11 +10,13 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`)
-                    .then(res => res.json());
+                const response = await global.request
+                    .get('/bookings');
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.authorizationError.invalid);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.authorizationError.invalid);
 
             } catch (err) {
                 throw err;
@@ -30,12 +28,14 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    headers: { 'Authorization': "test" },
-                }).then(res => res.json());
+                const response = await global.request
+                    .get('/bookings')
+                    .set('Authorization', "test");
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.authorizationError.invalid);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.authorizationError.invalid);
 
             } catch (err) {
                 throw err;
@@ -47,12 +47,14 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    headers: { 'Authorization': global.apiAuth },
-                }).then(res => res.json());
+                const response = await global.request
+                    .get('/bookings')
+                    .set('Authorization', global.apiAuth);
 
-                expect(response).have.property("data").to.be.an("object");
-                expect(response.data).have.property("bookings").to.be.an("array");
+                const body = response.body;
+
+                expect(body).have.property("data").to.be.an("object");
+                expect(body.data).have.property("bookings").to.be.an("array");
 
             } catch (err) {
                 throw err;
@@ -68,12 +70,13 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    method: "PUT"
-                }).then(res => res.json());
+                const response = await global.request
+                    .put('/bookings');
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.addBookingError.noFirstName);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.addBookingError.noFirstName);
 
             } catch (err) {
                 throw err;
@@ -85,16 +88,16 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    method: "PUT",
-                    body: JSON.stringify({
+                const response = await global.request
+                    .put('/bookings')
+                    .send({
                         firstName: "test"
-                    }),
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json());
+                    });
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.addBookingError.noLastName);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.addBookingError.noLastName);
 
             } catch (err) {
                 throw err;
@@ -106,17 +109,17 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    method: "PUT",
-                    body: JSON.stringify({
+                const response = await global.request
+                    .put('/bookings')
+                    .send({
                         firstName: "test",
                         lastName: "test"
-                    }),
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json());
+                    });
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.addBookingError.noEmail);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.addBookingError.noEmail);
 
             } catch (err) {
                 throw err;
@@ -128,18 +131,18 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    method: "PUT",
-                    body: JSON.stringify({
+                const response = await global.request
+                    .put('/bookings')
+                    .send({
                         firstName: "test",
                         lastName: "test",
                         email: "test@test.com"
-                    }),
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json());
+                    });
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.addBookingError.noPhoneNumber);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.addBookingError.noPhoneNumber);
 
             } catch (err) {
                 throw err;
@@ -151,22 +154,22 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(`${host}/bookings`, {
-                    method: "PUT",
-                    body: JSON.stringify({
+                const response = await global.request
+                    .put('/bookings')
+                    .send({
                         firstName: "test",
                         lastName: "test",
                         email: "test@test.com",
                         phoneNumber: "12345"
-                    }),
-                    headers: { 'Content-Type': 'application/json' }
-                }).then(res => res.json());
+                    });
 
-                expect(response).have.property("data").to.be.an("object");
-                expect(response.data).have.property("booking").to.be.an("object");
-                expect(response.data.booking).have.property("_id");
+                const body = response.body;
 
-                global.newBookingId = response.data.booking._id;
+                expect(body).have.property("data").to.be.an("object");
+                expect(body.data).have.property("booking").to.be.an("object");
+                expect(body.data.booking).have.property("_id");
+
+                global.newBookingId = body.data.booking._id;
 
             } catch (err) {
                 throw err;
@@ -182,14 +185,13 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(
-                    `${host}/bookings/${global.newBookingId}`, {
-                        method: "DELETE"
-                    })
-                    .then(res => res.json());
+                const response = await global.request
+                    .delete(`/bookings/${global.newBookingId}`);
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.authorizationError.invalid);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.authorizationError.invalid);
 
             } catch (err) {
                 throw err;
@@ -201,15 +203,14 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(
-                    `${host}/bookings/${global.newBookingId}`, {
-                        method: "DELETE",
-                        headers: { 'Authorization': "test" }
-                    })
-                    .then(res => res.json());
+                const response = await global.request
+                    .delete(`/bookings/${global.newBookingId}`)
+                    .set('Authorization', "test");
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.authorizationError.invalid);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.authorizationError.invalid);
 
             } catch (err) {
                 throw err;
@@ -221,15 +222,14 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(
-                    `${host}/bookings/1234`, {
-                        method: "DELETE",
-                        headers: { 'Authorization': global.apiAuth }
-                    })
-                    .then(res => res.json());
+                const response = await global.request
+                    .delete(`/bookings/1234`)
+                    .set('Authorization', global.apiAuth);
 
-                expect(response).have.property("error").equal(true);
-                expect(response).have.property("msg").equal(Const.deleteBookingError.invalidId);
+                const body = response.body;
+
+                expect(body).have.property("error").equal(true);
+                expect(body).have.property("msg").equal(Const.deleteBookingError.invalidId);
 
             } catch (err) {
                 throw err;
@@ -241,14 +241,13 @@ describe('Bookings API routes', function () {
 
             try {
 
-                const response = await fetch(
-                    `${host}/bookings/${global.newBookingId}`, {
-                        method: "DELETE",
-                        headers: { 'Authorization': global.apiAuth }
-                    })
-                    .then(res => res.json());
+                const response = await global.request
+                    .delete(`/bookings/${global.newBookingId}`)
+                    .set('Authorization', global.apiAuth);
 
-                expect(response).have.property("data").to.be.an("object");
+                const body = response.body;
+
+                expect(body).have.property("data").to.be.an("object");
 
             } catch (err) {
                 throw err;
