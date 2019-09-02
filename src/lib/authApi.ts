@@ -1,9 +1,9 @@
-'use strict';
-const Utils = require("./utils");
-const Config = require("../config");
-const Const = require("../lib/consts");
+import Utils = require("./utils");
+import Config = require("../config");
+import Const from "../lib/consts";
+import express from "express";
 
-const checkAdmin = async (req, res, next) => {
+const checkAdmin = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     try {
 
@@ -30,4 +30,4 @@ const checkAdmin = async (req, res, next) => {
 
 }
 
-module.exports = checkAdmin;
+export = checkAdmin;

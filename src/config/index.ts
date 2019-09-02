@@ -1,5 +1,4 @@
-'use strict';
-module.exports = {
+export = {
     port: 8080,
     databaseUrl: "mongodb://localhost/confi",
     admin: {

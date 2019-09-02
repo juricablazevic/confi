@@ -1,5 +1,4 @@
-'use strict';
-var mongoose = require('mongoose');
+import mongoose = require('mongoose');
 
 // Defining a schema
 const schema = new mongoose.Schema({
@@ -26,4 +25,4 @@ const schema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("booking", schema);
+export = mongoose.model("booking", schema);

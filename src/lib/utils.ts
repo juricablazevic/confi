@@ -1,8 +1,8 @@
-'use strict';
-const Config = require("../config");
-const nodemailer = require('nodemailer');
+import Config from "../config";
+import nodemailer from 'nodemailer';
+import { Response } from 'express';
 
-module.exports = {
+export = {
     generateCode: (length = 6) => {
 
         let code = "";
@@ -14,19 +14,19 @@ module.exports = {
         return code;
 
     },
-    successResponse: (res, data = {}) => {
+    successResponse: (res: Response, data = {}) => {
         res.json({
             error: false,
             data
         })
     },
-    errorResponse: (res, msg = "") => {
+    errorResponse: (res: Response, msg = "") => {
         res.json({
             error: true,
             msg
         })
     },
-    sendMail: async ({ to, subject, text }) => {
+    sendMail: async ({ to, subject, text }: { to: string, subject: string, text: string }) => {
 
         try {
 

@@ -1,5 +1,4 @@
-'use strict';
-module.exports = {
+export = {
     addBookingError: {
         noFirstName: "firstName is required",
         noLastName: "lastName is required",

@@ -1,21 +1,26 @@
-'use strict';
-const express = require('express');
-const router = express.Router();
-const Utils = require("../lib/utils");
-const isAdmin = require("../lib/authApi");
-const BookingModel = require("../models/booking");
-const mongoose = require("mongoose");
-const Const = require("../lib/consts");
+import { Router } from 'express';
+import Utils from "../lib/utils";
+import isAdmin from "../lib/authApi";
+import BookingModel from "../models/booking";
+import mongoose from "mongoose";
+import Const from "../lib/consts";
+
+const router = Router();
 
 router.put('/', async (req, res) => {
 
     try {
 
         const {
-            firstName,
-            lastName,
-            email,
-            phoneNumber
+            firstName = "",
+            lastName = "",
+            email = "",
+            phoneNumber = ""
+        }: {
+            firstName: string,
+            lastName: string,
+            email: string,
+            phoneNumber: string
         } = req.body;
 
         if (!firstName)
@@ -31,21 +36,15 @@ router.put('/', async (req, res) => {
             return Utils.errorResponse(res, Const.addBookingError.noPhoneNumber);
 
         const confirmationCode = Utils.generateCode();
-        let booking = await BookingModel.findOne({ email });
 
-        if (!booking) {
-            booking = await BookingModel.create({
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                confirmationCode
-            });
-        }
-        else {
-            booking.confirmationCode = confirmationCode;
-            await booking.save();
-        }
+        let booking = await BookingModel.findOneAndUpdate(
+            { email },
+            { ...req.body, confirmationCode },
+            { new: true }
+        );
+
+        if (!booking)
+            booking = await BookingModel.create({ ...req.body, confirmationCode });
 
         // i do not want await sendMail because api will execute longer,
         // so it will be executed asynchronously
@@ -103,4 +102,4 @@ router.delete('/:id', isAdmin, async (req, res) => {
 
 });
 
-module.exports = router; 
+export = router; 
