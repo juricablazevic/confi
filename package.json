@@ -5,7 +5,7 @@
     "main": "src/index.js",
     "scripts": {
         "test": "mocha ./build/test --timeout 10000",
-        "tsc": "tsc"
+        "tsc": "rm -rf ./build && tsc"
     },
     "repository": {
         "type": "git",
