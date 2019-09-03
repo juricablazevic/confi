@@ -2,7 +2,7 @@
     "name": "confi",
     "version": "1.0.0",
     "description": "confi",
-    "main": "src/index.js",
+    "main": "build/index.js",
     "scripts": {
         "test": "mocha ./build/test --timeout 10000",
         "tsc": "rm -rf ./build && tsc"
