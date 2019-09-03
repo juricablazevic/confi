@@ -1,5 +1,5 @@
-import Utils = require("./utils");
-import Config = require("../config");
+import Utils from "./utils";
+import Config from "../config";
 import Const from "../lib/consts";
 import express from "express";
 
