@@ -1,5 +1,5 @@
 # confi
-This backend application is for register users for conference meetings and send confirmation code to registered users so they can participate in conferences.
+This backend application is for register users for conference meetings and send confirmation code to registered users email so they can participate in conferences.
 
 ## Requirements:
 Node >= 8.14.1
